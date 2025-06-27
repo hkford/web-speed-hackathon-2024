@@ -6,6 +6,33 @@ import { decrypt } from '@wsh-2024/image-encrypt/src/decrypt';
 
 import { getImageUrl } from '../../../lib/image/getImageUrl';
 
+// 最適な画像フォーマットを取得（Viewer用）
+const getOptimalViewerFormat = (): 'jxl' | 'avif' | 'webp' | 'jpg' => {
+  const canvas = document.createElement('canvas');
+  canvas.width = 1;
+  canvas.height = 1;
+  
+  // JPEG-XL対応チェック
+  const supportsJXL = canvas.toDataURL('image/jxl').indexOf('data:image/jxl') === 0;
+  if (supportsJXL) {
+    return 'jxl';
+  }
+  
+  // AVIF対応チェック
+  const supportsAVIF = canvas.toDataURL('image/avif').indexOf('data:image/avif') === 0;
+  if (supportsAVIF) {
+    return 'avif';
+  }
+  
+  // WebP対応チェック
+  const supportsWebP = canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+  if (supportsWebP) {
+    return 'webp';
+  }
+  
+  return 'jpg';
+};
+
 const _Canvas = styled.canvas`
   height: 100%;
   width: auto;
@@ -23,7 +50,7 @@ export const ComicViewerPage = ({ pageImageId }: Props) => {
   useAsync(async () => {
     const image = new Image();
     image.src = getImageUrl({
-      format: 'jxl',
+      format: getOptimalViewerFormat(),
       imageId: pageImageId,
     });
     await image.decode();

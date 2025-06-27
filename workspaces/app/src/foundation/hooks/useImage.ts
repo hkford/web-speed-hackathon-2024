@@ -2,13 +2,35 @@ import { useAsync } from 'react-use';
 
 import { getImageUrl } from '../../lib/image/getImageUrl';
 
+// 最適な画像フォーマットを取得
+const getOptimalImageFormat = (): 'avif' | 'webp' | 'jpg' => {
+  // AVIF対応チェック
+  const canvas = document.createElement('canvas');
+  canvas.width = 1;
+  canvas.height = 1;
+  const supportsAVIF = canvas.toDataURL('image/avif').indexOf('data:image/avif') === 0;
+  
+  if (supportsAVIF) {
+    return 'avif';
+  }
+  
+  // WebP対応チェック
+  const supportsWebP = canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+  
+  if (supportsWebP) {
+    return 'webp';
+  }
+  
+  return 'jpg';
+};
+
 export const useImage = ({ height, imageId, width }: { height: number; imageId: string; width: number }) => {
   const { value } = useAsync(async () => {
     const dpr = window.devicePixelRatio;
 
     const img = new Image();
     img.src = getImageUrl({
-      format: 'jpg',
+      format: getOptimalImageFormat(),
       height: height * dpr,
       imageId,
       width: width * dpr,
