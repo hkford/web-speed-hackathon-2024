@@ -78,12 +78,24 @@ importers:
         specifier: 1.4.0
         version: 1.4.0
     devDependencies:
+      '@node-kit/pnpm-workspace-root':
+        specifier: 3.2.0
+        version: 3.2.0
       '@types/react':
         specifier: 18.2.0
         version: 18.2.0
       '@types/react-dom':
         specifier: 18.2.1
         version: 18.2.1
+      esbuild-plugin-polyfill-node:
+        specifier: 0.3.0
+        version: 0.3.0(esbuild@0.25.5)
+      pkg-dir:
+        specifier: 5.0.0
+        version: 5.0.0
+      tsup:
+        specifier: 8.0.1
+        version: 8.0.1(typescript@5.4.2)
 
   workspaces/app:
     dependencies:
@@ -157,9 +169,6 @@ importers:
       '@jsquash/jxl':
         specifier: 1.1.0
         version: 1.1.0
-      '@wsh-2024/admin':
-        specifier: workspace:*
-        version: link:../admin
       '@wsh-2024/app':
         specifier: workspace:*
         version: link:../app

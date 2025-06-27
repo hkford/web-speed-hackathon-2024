@@ -1,6 +1,9 @@
 {
   "name": "@wsh-2024/admin",
   "private": true,
+  "scripts": {
+    "build": "tsup"
+  },
   "dependencies": {
     "@chakra-ui/icons": "2.1.1",
     "@chakra-ui/react": "2.8.2",
@@ -20,7 +23,11 @@
     "yup": "1.4.0"
   },
   "devDependencies": {
+    "@node-kit/pnpm-workspace-root": "3.2.0",
     "@types/react": "18.2.0",
-    "@types/react-dom": "18.2.1"
+    "@types/react-dom": "18.2.1",
+    "esbuild-plugin-polyfill-node": "0.3.0",
+    "pkg-dir": "5.0.0",
+    "tsup": "8.0.1"
   }
 }

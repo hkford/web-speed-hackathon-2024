@@ -11,7 +11,7 @@ export default defineConfig(async (): Promise<Options[]> => {
   const PACKAGE_DIR = (await findPackageDir(process.cwd()))!;
   const WORKSPACE_DIR = (await findWorkspaceDir(process.cwd()))!;
 
-  const OUTPUT_DIR = path.resolve(PACKAGE_DIR, './dist');
+  const OUTPUT_DIR = path.resolve(WORKSPACE_DIR, './workspaces/client/dist');
 
   const SEED_IMAGE_DIR = path.resolve(WORKSPACE_DIR, './workspaces/server/seeds/images');
   const IMAGE_PATH_LIST = fs.readdirSync(SEED_IMAGE_DIR).map((file) => `/images/${file}`);
@@ -19,10 +19,9 @@ export default defineConfig(async (): Promise<Options[]> => {
   return [
     {
       bundle: true,
-      clean: true,
+      clean: false, // clientと同じディスクトリを使うのでfalse
       entry: {
-        client: path.resolve(PACKAGE_DIR, './src/index.tsx'),
-        serviceworker: path.resolve(PACKAGE_DIR, './src/serviceworker/index.ts'),
+        admin: path.resolve(PACKAGE_DIR, './src/admin.tsx'),
       },
       env: {
         API_URL: '',
@@ -36,7 +35,6 @@ export default defineConfig(async (): Promise<Options[]> => {
         };
         options.publicPath = '/';
       },
-      // 実はここも不要説
       esbuildPlugins: [
         polyfillNode({
           globals: {
@@ -49,6 +47,7 @@ export default defineConfig(async (): Promise<Options[]> => {
           },
         }),
       ],
+      external: ['@wsh-2024/app'], // appは使わない
       format: 'iife',
       loader: {
         '.json?file': 'file',
