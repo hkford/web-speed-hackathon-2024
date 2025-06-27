@@ -6,6 +6,13 @@ function copyDir(src, dest) {
     fs.mkdirSync(dest, { recursive: true });
   }
   
+  // 使用されているフォントファイルのみをコピー
+  const usedFonts = [
+    'NotoSansJP-Regular.woff',
+    'NotoSansJP-Medium.woff', 
+    'NotoSansJP-Bold.woff'
+  ];
+  
   const items = fs.readdirSync(src);
   for (const item of items) {
     const srcPath = path.join(src, item);
@@ -14,7 +21,17 @@ function copyDir(src, dest) {
     if (fs.statSync(srcPath).isDirectory()) {
       copyDir(srcPath, destPath);
     } else {
-      fs.copyFileSync(srcPath, destPath);
+      // フォントファイルの場合は使用リストをチェック
+      if (item.startsWith('NotoSansJP-') && item.endsWith('.woff')) {
+        if (usedFonts.includes(item)) {
+          fs.copyFileSync(srcPath, destPath);
+          console.log(`Copied used font: ${item}`);
+        } else {
+          console.log(`Skipped unused font: ${item}`);
+        }
+      } else {
+        fs.copyFileSync(srcPath, destPath);
+      }
     }
   }
 }
